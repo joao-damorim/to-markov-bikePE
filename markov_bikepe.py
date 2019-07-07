@@ -52,34 +52,6 @@ def criar_array_futuro(distribuicao_de_bicicleta_atual, matriz_de_transicao_pass
     
     return [local_1, local_2, local_3, distribuicao_de_bicicleta_atual[0].item(0), distribuicao_de_bicicleta_atual[0].item(1), distribuicao_de_bicicleta_atual[0].item(2), distribuicao_de_bicicleta_atual[1]]
 
-def mostrar_quantidade_por_local(distribuicao_final):
-    qtd_l1 = round(distribuicao_final[6]*(distribuicao_final[0]/100),3)
-    qtd_l2 = round(distribuicao_final[6]*(distribuicao_final[1]/100),3)
-    qtd_l3 = round(distribuicao_final[6]*(distribuicao_final[2]/100),3)
-
-    return [qtd_l1, qtd_l2, qtd_l3]
-
-def arredondar_qtd(lista_qtd_bicicleta):
-    lista_qtd = []
-    for i in lista_qtd_bicicleta:
-        i = str(i)
-        i = list(map(int, i.split(".")))
-        lista_qtd.append(i)
-    lista_dec = []
-    for index, item in enumerate(lista_qtd):
-            lista_dec.append(item[1])
-            
-    pos_mais_um = lista_dec.index(max(lista_dec))
-
-    lista_ar = []
-    for qtd in lista_qtd_bicicleta:
-        print(qtd)
-        lista_ar.append(round(qtd))
-    
-    lista_ar[pos_mais_um] += 1
-  
-    return lista_ar
-    
 def definir_equipe(equipe_1, equipe_2, equipe_3, lista_qtd_locais):
     lista_equipe = []
     lista_equipe.append(equipe_1)
@@ -118,7 +90,7 @@ def definir_pares(lista_pares, distribuicao_final):
 matriz_transicao = criar_matriz_de_transicao(0.08, 0.90, 0.02, 0.67, 0.23, 0.10, 0.33, 0.64, 0.03)
 distribuicao_comeco_dia = calcular_total_de_bicicletas_por_lugar_porcentagem(20, 6, 12, 2)
 distribuicao_final_dia = criar_array_futuro(distribuicao_comeco_dia, matriz_transicao)
-res_eq_est = (definir_equipe(5,20,10,distribuicao_final_dia[:3]))
+res_eq_est = definir_equipe(5,20,10,distribuicao_final_dia[:3])
 definir_pares(res_eq_est, distribuicao_final_dia)
 
 
