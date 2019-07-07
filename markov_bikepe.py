@@ -44,18 +44,18 @@ def criar_array_futuro(distribuicao_de_bicicleta_atual, matriz_de_transicao_pass
 
     array_futuro = np.dot(distribuicao_de_bicicleta_atual[0], matriz_de_transicao_passada)
 
-    local_1 = array_futuro.item(0)
+    local_1 = round(array_futuro.item(0),2)
 
-    local_2 = array_futuro.item(1)
+    local_2 = round(array_futuro.item(1),2)
 
-    local_3 = array_futuro.item(2)
+    local_3 = round(array_futuro.item(2),2)
     
     return [local_1, local_2, local_3, distribuicao_de_bicicleta_atual[0].item(0), distribuicao_de_bicicleta_atual[0].item(1), distribuicao_de_bicicleta_atual[0].item(2), distribuicao_de_bicicleta_atual[1]]
 
 def mostrar_quantidade_por_local(distribuicao_final):
-    qtd_l1 = round(distribuicao_final[6]*(distribuicao_final[0]/100),1)
-    qtd_l2 = round(distribuicao_final[6]*(distribuicao_final[1]/100),1)
-    qtd_l3 = round(distribuicao_final[6]*(distribuicao_final[2]/100),1)
+    qtd_l1 = round(distribuicao_final[6]*(distribuicao_final[0]/100),3)
+    qtd_l2 = round(distribuicao_final[6]*(distribuicao_final[1]/100),3)
+    qtd_l3 = round(distribuicao_final[6]*(distribuicao_final[2]/100),3)
 
     return [qtd_l1, qtd_l2, qtd_l3]
 
@@ -64,25 +64,20 @@ def arredondar_qtd(lista_qtd_bicicleta):
     for i in lista_qtd_bicicleta:
         i = str(i)
         i = list(map(int, i.split(".")))
-#
-#        i = str(i)
-#        i = i.split(".")
-        
         lista_qtd.append(i)
     lista_dec = []
     for index, item in enumerate(lista_qtd):
             lista_dec.append(item[1])
             
-    print(lista_dec)
-    pos_mais_um = lista_dec.index(min(lista_dec))
-    print(pos_mais_um)
-#    lista_qtd[pos_mais_um][0] += 1 
+    pos_mais_um = lista_dec.index(max(lista_dec))
+
     lista_ar = []
     for qtd in lista_qtd_bicicleta:
+        print(qtd)
         lista_ar.append(round(qtd))
     
-    lista_ar[pos_mais_um] -= 1
-    
+    lista_ar[pos_mais_um] += 1
+  
     return lista_ar
     
 def definir_equipe(equipe_1, equipe_2, equipe_3, lista_qtd_locais):
@@ -107,24 +102,25 @@ def definir_equipe(equipe_1, equipe_2, equipe_3, lista_qtd_locais):
         
     return lista_oti
         
-        
-def definir_pares(lista_pares):
-        print(lista_pares)
-        print("Boulevard Rio Branco:\n - Quantidade de Bicicletas: %s\n - Quantidade de Integrantes da Equipe Responsavel: %s" % (str(lista_pares[0][1]), str(lista_pares[0][0])))
-        print("Porto Digital:\n - Quantidade de Bicicletas: %s\n - Quantidade de Integrantes da Equipe Responsavel: %s" % (str(lista_pares[1][1]), str(lista_pares[1][0])))
-        print("Praça do Arsenal:\n - Quantidade de Bicicletas: %s\n - Quantidade de Integrantes da Equipe Responsavel: %s" % (str(lista_pares[2][1]), str(lista_pares[2][0])))
+def definir_pares(lista_pares, distribuicao_final):
+        lista_local_por = distribuicao_final[:3]
+        for par in lista_pares:
+            for index, local in enumerate(lista_local_por):
+                if (par[1] == local):
+                    if (index == 0):
+                        print("Boulevard Rio Branco:\n - Quantidade de bicicletas no local: %s%% do total inicial.\n - Rendimento da equipe (biciletas/hora): %s" % (str(par[1]), str(par[0])))
+                    if (index == 1):
+                        print("Porto Digital:\n - Quantidade de bicicletas no local: %s%% do total inicial.\n - Rendimento da equipe (biciletas/hora): %s" % (str(par[1]), str(par[0])))
+                    if (index == 2):    
+                        print("Praça do Arsenal:\n - Quantidade de bicicletas no local: %s%% do total inicial.\n - Rendimento da equipe (biciletas/hora): %s" % (str(par[1]), str(par[0])))
 
 
 matriz_transicao = criar_matriz_de_transicao(0.08, 0.90, 0.02, 0.67, 0.23, 0.10, 0.33, 0.64, 0.03)
-distribuicao_comeco_dia = calcular_total_de_bicicletas_por_lugar_porcentagem(28, 10, 12, 6)
+distribuicao_comeco_dia = calcular_total_de_bicicletas_por_lugar_porcentagem(20, 6, 12, 2)
 distribuicao_final_dia = criar_array_futuro(distribuicao_comeco_dia, matriz_transicao)
-qtd_bicicleta_local_final_dia = mostrar_quantidade_por_local(distribuicao_final_dia)
-print(qtd_bicicleta_local_final_dia)
+res_eq_est = (definir_equipe(5,20,10,distribuicao_final_dia[:3]))
+definir_pares(res_eq_est, distribuicao_final_dia)
 
-qtd_bicicleta_local_final_dia_ar = arredondar_qtd(qtd_bicicleta_local_final_dia)
 
-res_eq_est = (definir_equipe(10,20,5,qtd_bicicleta_local_final_dia_ar))
-
-definir_pares(res_eq_est)
 
 
